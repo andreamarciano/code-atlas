@@ -99,3 +99,49 @@ For detailed initial configuration steps, see:
 
 - [FrontendSetup.md](FrontendSetup.md)
 - [BackendSetup.md](BackendSetup.md)
+
+---
+
+## 🗂️ Project Structure Overview
+
+```text
+/code-atlas
+│
+├── /backend                  # Node.js + Express + Prisma
+│   ├── /node_modules
+│   ├── /prisma               # Prisma schema and migrations
+│   │   └── schema.prisma
+│   ├── /src
+│   │   ├── prismaClient.ts   # Prisma Client
+│   │   └── index.ts          # Entry point
+│   ├── .env                  
+│   ├── .gitignore
+|   ├── docker-compose.yaml   # Docker setup for backend + PostgreSQL
+│   ├── Dockerfile
+|   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+|
+├── /frontend                 # React + Vite + Tailwind app
+|   ├── /node_modules
+│   ├── /public
+│   ├── /src
+|   │   ├── App.css
+|   │   ├── App.tsx
+|   │   ├── index.css
+|   │   ├── main.tsx
+|   │   └── vite-env.d.ts
+|   ├── .gitignore
+|   ├── eslint.config.js
+|   ├── index.html
+|   ├── package-lock.json
+|   ├── package.json
+|   ├── tsconfig.app.json
+|   ├── tsconfig.json
+|   ├── tsconfig.node.json
+|   └── vite.config.ts
+|
+├── BackendSetup.md
+├── FrontendSetup.md
+└── README.md
+```

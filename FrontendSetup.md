@@ -86,7 +86,7 @@ Add an `@import` to your `App.css` file:
 ## 🗂️ Project Structure Overview {#structure}
 
 ```text
-/code-atlas
+/frontend
 │
 ├── /node_modules
 ├── /public
@@ -96,7 +96,6 @@ Add an `@import` to your `App.css` file:
 │   ├── index.css
 │   ├── main.tsx
 │   └── vite-env.d.ts
-│
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html

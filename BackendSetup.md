@@ -12,7 +12,7 @@
 - [Step 8: Start the Backend Server](#step8)
 - [Step 9 (optional): Access PostgreSQL CLI](#step9)
 - [Step 10: Development Workflow](#step10)
-- [Project Structure](#structure)
+- [Project Structure Overview](#structure)
 - [Link to GitHub](#github)
 
 ## 📦 Step 1: Initialize the Backend Project {#step1}
@@ -302,12 +302,12 @@ docker compose down
 
 ---
 
-## 🗂️ Project Structure {#structure}
+## 🗂️ Project Structure Overview {#structure}
 
 ```text
 /code-atlas
 │
-├── /backend                  # Node.js + Express + Prisma API
+├── /backend                  # Node.js + Express + Prisma
 │   ├── /node_modules
 │   ├── /prisma               # Prisma schema and migrations
 │   │   └── schema.prisma
@@ -321,11 +321,13 @@ docker compose down
 |   ├── package-lock.json
 │   ├── package.json
 │   └── tsconfig.json
+|
 ├── /frontend                 # React + Vite + Tailwind app
 │   ├── /public
 │   ├── /src
 │   ├── package.json
 │   └── vite.config.ts
+|
 └── README.md
 ```
 
