@@ -97,8 +97,8 @@ docker compose down
 
 For detailed initial configuration steps, see:
 
-- [FrontendSetup.md](FrontendSetup.md)
-- [BackendSetup.md](BackendSetup.md)
+- [FrontendSetup.md](./notes/FrontendSetup.md)
+- [BackendSetup.md](./notes/BackendSetup.md)
 
 ---
 
@@ -122,7 +122,7 @@ For detailed initial configuration steps, see:
 │   ├── package.json
 │   └── tsconfig.json
 |
-├── /frontend                 # React + Vite + Tailwind app
+├── /frontend                 # React + Vite + Tailwind
 |   ├── /node_modules
 │   ├── /public
 │   ├── /src
@@ -141,7 +141,10 @@ For detailed initial configuration steps, see:
 |   ├── tsconfig.node.json
 |   └── vite.config.ts
 |
-├── BackendSetup.md
-├── FrontendSetup.md
+├── /notes 
+|   ├── BackendSetup.md
+|   ├── FrontendSetup.md
+|   └── TestConnection.md
+|
 └── README.md
 ```

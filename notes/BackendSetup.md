@@ -14,6 +14,7 @@
 - [Step 10: Development Workflow](#step10)
 - [Project Structure Overview](#structure)
 - [Link to GitHub](#github)
+- [Test Frontend-Backend Connection](#testconnection)
 
 ## 📦 Step 1: Initialize the Backend Project {#step1}
 
@@ -30,18 +31,19 @@ npm init -y
 ### Runtime dependencies
 
 ```bash
-npm install express dotenv @prisma/client pg
+npm install express dotenv cors @prisma/client pg 
 ```
 
 - `express`: Web framework.
 - `dotenv`: Load environment variables.
+- `cors`: Middleware to enable Cross-Origin requests from the frontend.
 - `@prisma/client`: Auto-generated Prisma client.
 - `pg`: PostgreSQL client for Node.js.
 
 ### Development dependencies
 
 ```bash
-npm install -D prisma typescript ts-node nodemon @types/node @types/express 
+npm install -D prisma typescript ts-node nodemon @types/node @types/express @types/cors
 ```
 
 - `prisma`: Prisma CLI (schema management, migrations).
@@ -140,7 +142,7 @@ Edit the `.env` file in the root:
 
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codeatlas
-PORT=3000
+PORT=4000
 ```
 
 ---
@@ -322,7 +324,7 @@ docker compose down
 │   ├── package.json
 │   └── tsconfig.json
 |
-├── /frontend                 # React + Vite + Tailwind app
+├── /frontend                 # React + Vite + Tailwind
 │   ├── /public
 │   ├── /src
 │   ├── package.json
@@ -345,3 +347,11 @@ git commit -m "First Commit"
 git remote add origin https://github.com/username/repository
 git push -u origin main
 ```
+
+---
+
+## Test Frontend-Backend Connection {#testconnection}
+
+To verify that the backend is running and can communicate with the frontend, follow the steps in the separate guide below:
+
+- [TestConnection.md](TestConnection.md)
