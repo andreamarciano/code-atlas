@@ -145,7 +145,8 @@ For detailed initial configuration steps, see:
 ├── /notes 
 |   ├── BackendSetup.md
 |   ├── FrontendSetup.md
-|   └── TestConnection.md
+|   ├── TestDockerConnection.md
+|   └── TestExpressConnection.md
 |
 └── README.md
 ```

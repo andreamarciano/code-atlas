@@ -302,8 +302,6 @@ docker compose down
 
 ---
 
----
-
 ## 🗂️ Project Structure Overview {#structure}
 
 ```text
