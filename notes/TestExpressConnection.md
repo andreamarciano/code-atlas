@@ -1,10 +1,15 @@
-# 🔗 Test Frontend ↔ Backend Connection
+# 🔗 Test Frontend ↔ Backend Connection (Express)
 
 This guide helps you verify that your frontend (React + Vite) is properly communicating with your backend (Express).
 
+## Table of Contents
+
+- [1. Start the Backend](#backend)
+- [2. Create a Frontend Fetch Example](#frontend)
+
 ---
 
-## 1. Start the Backend
+## 1. Start the Backend {#backend}
 
 Make sure your backend is running on a specific port (e.g. `http://localhost:4000`). A minimal `index.ts` should look like this:
 
@@ -38,7 +43,7 @@ npm run dev
 
 ---
 
-## 2. Create a Frontend Fetch Example
+## 2. Create a Frontend Fetch Example {#frontend}
 
 In your `App.tsx`, add the following:
 

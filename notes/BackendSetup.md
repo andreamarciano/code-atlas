@@ -164,7 +164,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["npm", "run", "dev"]
 ```
@@ -181,9 +181,9 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/codeatlas
       - NODE_ENV=development
-      - PORT=3000
+      - PORT=4000
     ports:
-      - "3000:3000"
+      - "4000:4000"
     depends_on:
       - db
     volumes:
@@ -312,6 +312,7 @@ docker compose down
 ├── /backend                  # Node.js + Express + Prisma
 │   ├── /node_modules
 │   ├── /prisma               # Prisma schema and migrations
+│   │   ├── /migrations
 │   │   └── schema.prisma
 │   ├── /src
 │   │   ├── prismaClient.ts   # Prisma Client
@@ -354,4 +355,10 @@ git push -u origin main
 
 To verify that the backend is running and can communicate with the frontend, follow the steps in the separate guide below:
 
-- [TestConnection.md](TestConnection.md)
+- [TestExpressConnection.md](TestExpressConnection.md)
+  → A minimal test to check if your **Express server is running** and accessible from the frontend.  
+  This does **not require Docker or a database**, and helps confirm the basic API connection works.
+
+- [TestDockerConnection.md](TestDockerConnection.md)
+  → A full-stack test including **Express + Prisma + PostgreSQL inside Docker**.  
+  This verifies that your database is running, migrations are applied, and that the frontend can **read/write data** via the backend.

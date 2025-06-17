@@ -110,6 +110,7 @@ For detailed initial configuration steps, see:
 ├── /backend                  # Node.js + Express + Prisma
 │   ├── /node_modules
 │   ├── /prisma               # Prisma schema and migrations
+│   │   ├── /migrations
 │   │   └── schema.prisma
 │   ├── /src
 │   │   ├── prismaClient.ts   # Prisma Client
