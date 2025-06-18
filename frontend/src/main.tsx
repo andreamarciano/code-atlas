@@ -5,12 +5,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 
+import LanguagePage from "./pages/LanguagePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "language/:name",
+    element: <LanguagePage />,
   },
   {
     path: "*",

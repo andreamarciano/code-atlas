@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN chmod +x entrypoint.sh
+
 EXPOSE 4000
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["./entrypoint.sh"]
