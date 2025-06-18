@@ -2,36 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import type { Language } from "../type";
 
-function Navbar() {
-  // Languages
-  const [languages, setLanguages] = useState<Language[]>([]);
+type NavbarProps = {
+  languages: Language[];
+};
+
+function Navbar({ languages }: NavbarProps) {
   // Scroll
   const scrollRef = useRef<HTMLUListElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  /* Fetch Languages */
-  useEffect(() => {
-    const fetchLanguages = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/api/languages");
-        const data = await res.json();
-        setLanguages(data);
-      } catch (err) {
-        console.error("Error fetching languages in Navbar:", err);
-      }
-    };
-    fetchLanguages();
-  }, []);
-
-  /* Scroll */
-
   // Check if scroll arrows should be shown
   const updateScrollButtons = () => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const element = scrollRef.current;
+    if (!element) return;
 
-    const { scrollLeft, scrollWidth, clientWidth } = el;
+    const { scrollLeft, scrollWidth, clientWidth } = element;
     const maxScrollLeft = scrollWidth - clientWidth;
     const tolerance = 2;
 
@@ -43,37 +29,37 @@ function Navbar() {
   useEffect(() => {
     updateScrollButtons();
 
-    const el = scrollRef.current;
-    if (!el) return;
+    const element = scrollRef.current;
+    if (!element) return;
 
-    el.addEventListener("scroll", updateScrollButtons);
+    element.addEventListener("scroll", updateScrollButtons);
     window.addEventListener("resize", updateScrollButtons);
 
     return () => {
-      el.removeEventListener("scroll", updateScrollButtons);
+      element.removeEventListener("scroll", updateScrollButtons);
       window.removeEventListener("resize", updateScrollButtons);
     };
   }, [languages]);
 
   // Animate horizontal scroll in given direction
   const scrollByStep = (direction: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return null;
+    const element = scrollRef.current;
+    if (!element) return null;
 
     const step = 15 * (direction === "left" ? -1 : 1);
 
     let animFrameId: number;
 
     const scrollStep = () => {
-      if (!el) return;
+      if (!element) return;
 
-      const maxScrollLeft = el.scrollWidth - el.clientWidth;
-      let newScrollLeft = el.scrollLeft + step;
+      const maxScrollLeft = element.scrollWidth - element.clientWidth;
+      let newScrollLeft = element.scrollLeft + step;
 
       if (newScrollLeft < 0) newScrollLeft = 0;
       if (newScrollLeft > maxScrollLeft) newScrollLeft = maxScrollLeft;
 
-      el.scrollLeft = newScrollLeft;
+      element.scrollLeft = newScrollLeft;
       updateScrollButtons();
 
       if (
