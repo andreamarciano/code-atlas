@@ -66,26 +66,35 @@ npm install
 
 Open two terminals:
 
-- Frontend:
+#### Frontend
 
 ```bash
 npm run dev
 ```
 
-- Backend:
+#### Backend
+
+##### First-time Setup (or after Dockerfile or Prisma schema changes)
 
 ```bash
-# Build Docker images (only needed the first time or after Dockerfile changes)
-docker compose build
+docker compose up --build
+```
 
-# Run Prisma migrations inside the Docker container
-docker compose run app npx prisma migrate dev --name init
+- This will:
 
-# Start backend and database containers
+  - Build the Docker images
+  - Apply Prisma migrations (`npx prisma migrate deploy`)
+  - Seed the database with initial languages (`ts-node src/seed.ts`)
+  - Start the development server (`npm run dev`)
+- Everything is automated via the `entrypoint.sh` script inside the container.
+
+##### Regular Development (after initial build)
+
+```bash
 docker compose up
 ```
 
-To stop backend and database containers:
+##### **Stop backend** and database containers
 
 ```bash
 docker compose down
