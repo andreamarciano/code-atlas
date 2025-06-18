@@ -18,6 +18,7 @@ async function main() {
   ];
 
   for (const lang of initialLanguages) {
+    // Upsert: Tries to find a language with the same name. If found, no changes are made. If not, a new language is created.
     await prisma.language.upsert({
       where: { name: lang.name },
       update: {},
