@@ -1,0 +1,17 @@
+### Register a user POST /AUTH/REGISTER
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "arzi",
+  "password": "123"
+}
+
+### Login a user POST /AUTH/LOGIN
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "arzi",
+  "password": "1234"
+}

@@ -4,8 +4,104 @@ This note explains how we set up a static seed to populate our database with sup
 
 ## Table of Contents
 
+- [How to Apply Prisma Migrations with Docker](#migration)
 - [Backend Setup: Seed Static Languages](#seed)
 - [Frontend: Fetching Seeded Languages in Navbar](#frontend)
+
+---
+
+## 🐳 How to Apply Prisma Migrations with Docker {#migration}
+
+Set up and apply Prisma migrations using Docker.
+
+### 1. Start your containers (Postgres + app)
+
+```bash
+docker compose up -d
+```
+
+This starts the app and database containers in the background.
+
+### 2. Enter the app container's shell
+
+```bash
+docker exec -it codeatlas-app sh
+```
+
+You can check the container name with:
+
+```bash
+docker ps
+```
+
+### 3. Run the migration *inside* the container
+
+```text
+/app # npx prisma migrate dev --name init
+```
+
+This will:
+
+- Create a migration in `/prisma/migrations`
+- Apply it to the connected database (PostgreSQL container)
+- Generate the Prisma Client
+
+Exit the container after migration:
+
+```text
+/app # exit
+```
+
+### ❗ If you see a "drift detected" error
+
+This means the actual database schema is **out of sync** with the migration history (e.g. you deleted `/migrations`, but the database still has tables and records).
+
+You have two options to reset the database:
+
+#### Option A: Reset with Prisma
+
+```sh
+npx prisma migrate reset
+```
+
+This will:
+
+- Drop and recreate the database
+- Reapply the schema from `schema.prisma`
+- Optionally run your seed script
+- Regenerate Prisma Client
+
+#### Option B: Reset Docker volumes (full wipe)
+
+If you're using Docker volumes (e.g. persistent Postgres data), you can do:
+
+```bash
+docker compose down -v
+```
+
+Then restart everything:
+
+```bash
+docker compose up --build
+```
+
+### 4. Stop containers (optional)
+
+If you want to reset or rebuild:
+
+```bash
+docker compose down
+```
+
+### 5. Rebuild and relaunch everything
+
+Once migrations are stable and database is clean:
+
+```bash
+docker compose up --build
+```
+
+This will trigger the `entrypoint.sh` script which runs `migrate deploy` and seeds the DB (explained later).
 
 ---
 
@@ -102,6 +198,9 @@ npx ts-node src/seed.ts
 echo "Starting development server..."
 npm run dev
 ```
+
+> - ⚠️ `migrate deploy` is used in Docker because it's non-interactive and applies pre-generated migrations safely.
+> - In local development, `migrate dev` is used to generate and apply migrations interactively.
 
 ### 4. `Dockerfile`
 

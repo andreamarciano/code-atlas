@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import langRoutes from "./routes/languages";
+import authRoutes from "./routes/auth";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 /* API */
 app.use("/api/languages", langRoutes);
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend running at http://localhost:${PORT}`);
