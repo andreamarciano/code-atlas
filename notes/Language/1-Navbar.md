@@ -62,8 +62,6 @@ main()
 - Uses Prisma's `upsert` method to insert or skip if the language already exists (idempotent seed)
 - Runs as a standalone script to populate the database
 
-Certo! Ecco una sezione aggiuntiva da integrare nella parte del seed nel tuo documento, in inglese, con una spiegazione discorsiva e chiara:
-
 #### Why We Use a Separate Prisma Client in `seed.ts`
 
 In the `seed.ts` file, we explicitly create a new instance of the `PrismaClient`. This is **separate** from the shared Prisma client used in `prismaClient.ts` (which is imported by the main server). Here's why:
