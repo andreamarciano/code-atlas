@@ -317,18 +317,18 @@ docker compose down
 │   │   └── index.ts          # Entry point
 │   ├── .env                  
 │   ├── .gitignore
-|   ├── docker-compose.yaml   # Docker setup for backend + PostgreSQL
+│   ├── docker-compose.yaml   # Docker setup for backend + PostgreSQL
 │   ├── Dockerfile
-|   ├── package-lock.json
+│   ├── package-lock.json
 │   ├── package.json
 │   └── tsconfig.json
-|
+│
 ├── /frontend                 # React + Vite + Tailwind
 │   ├── /public
 │   ├── /src
 │   ├── package.json
 │   └── vite.config.ts
-|
+│
 └── README.md
 ```
 

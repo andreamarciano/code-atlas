@@ -117,36 +117,38 @@ For detailed initial configuration steps, see:
 │   │   └── index.ts          # Entry point
 │   ├── .env                  
 │   ├── .gitignore
-|   ├── docker-compose.yaml   # Docker setup for backend + PostgreSQL
+│   ├── docker-compose.yaml   # Docker setup for backend + PostgreSQL
 │   ├── Dockerfile
-|   ├── package-lock.json
+│   ├── package-lock.json
 │   ├── package.json
 │   └── tsconfig.json
-|
+│
 ├── /frontend                 # React + Vite + Tailwind
-|   ├── /node_modules
+│   ├── /node_modules
 │   ├── /public
 │   ├── /src
-|   │   ├── App.css
-|   │   ├── App.tsx
-|   │   ├── index.css
-|   │   ├── main.tsx
-|   │   └── vite-env.d.ts
-|   ├── .gitignore
-|   ├── eslint.config.js
-|   ├── index.html
-|   ├── package-lock.json
-|   ├── package.json
-|   ├── tsconfig.app.json
-|   ├── tsconfig.json
-|   ├── tsconfig.node.json
-|   └── vite.config.ts
-|
+│   │   ├── /components
+│   │   ├── /pages
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   └── vite-env.d.ts
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+│
 ├── /notes 
-|   ├── BackendSetup.md
-|   ├── FrontendSetup.md
-|   ├── TestDockerConnection.md
-|   └── TestExpressConnection.md
-|
+│   ├── BackendSetup.md
+│   ├── FrontendSetup.md
+│   ├── TestDockerConnection.md
+│   └── TestExpressConnection.md
+│
 └── README.md
 ```

@@ -7,8 +7,10 @@ This is a starter project created with **Vite**, using **React** and **TypeScrip
 - [Project Setup](#setup)
 - [Installing Dependencies](#dependencies)
 - [Running the Development Server](#running)
+- [Installing React Router](#reactrouter)
 - [Installing Tailwind CSS](#tailwind)
 - [Project Structure Overview](#structure)
+- [Continue with the Backend Setup](#backend)
 
 ---
 
@@ -53,6 +55,30 @@ This will launch the app at `http://localhost:5173` (default Vite port).
 
 ---
 
+## 📦 Installing React Router {#reactrouter}
+
+To enable **client-side routing** in your React app (e.g. navigating between pages like `/`, `/about`, `/languages` without full page reloads), install **React Router DOM**:
+
+```bash
+npm install react-router-dom
+```
+
+Since this project uses TypeScript, also install the type definitions:
+
+```bash
+npm install -D @types/react-router-dom
+```
+
+React Router allows you to define routes and nested layouts. For example, you can:
+
+- Navigate between views using `<NavLink />`
+- Create route-based pages with `createBrowserRouter`
+- Handle 404 pages and dynamic segments (like `/languages/:id`)
+
+You’ll use this library to wire up components like `Navbar`, `App`, and individual pages in your project.
+
+---
+
 ## Installing Tailwind CSS {#tailwind}
 
 ```bash
@@ -91,6 +117,8 @@ Add an `@import` to your `App.css` file:
 ├── /node_modules
 ├── /public
 ├── /src
+│   ├── /components
+│   ├── /pages
 │   ├── App.css
 │   ├── App.tsx
 │   ├── index.css
@@ -109,7 +137,7 @@ Add an `@import` to your `App.css` file:
 
 ---
 
-## Continue with the Backend Setup
+## Continue with the Backend Setup {#backend}
 
 Set up the backend (Node.js, Express, Prisma, PostgreSQL) in the next part:
 
