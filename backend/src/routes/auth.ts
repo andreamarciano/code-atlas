@@ -8,7 +8,7 @@ router.post("/register", async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    res.status(400).json({ error: "Username and password required" });
+    res.status(400).json({ error: "Username and password required" }); // Bad Request
     return;
   }
 
@@ -17,7 +17,7 @@ router.post("/register", async (req: Request, res: Response) => {
     where: { username },
   });
   if (existingUsername) {
-    res.status(409).json({ error: "Username already taken" });
+    res.status(409).json({ error: "Username already taken" }); // Conflict
     return;
   }
 
@@ -26,7 +26,7 @@ router.post("/register", async (req: Request, res: Response) => {
     data: { username, password },
   });
 
-  res.status(201).json({ message: "User registered", userId: newUser.id });
+  res.status(201).json({ message: "User registered", userId: newUser.id }); // Created
 });
 
 // LOGIN
@@ -41,7 +41,7 @@ router.post("/login", async (req: Request, res: Response) => {
   // Check credentials
   const user = await prisma.user.findUnique({ where: { username } });
   if (!user || user.password !== password) {
-    res.status(401).json({ error: "Invalid credentials" });
+    res.status(401).json({ error: "Invalid credentials" }); // Unauthorized
     return;
   }
 

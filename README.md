@@ -100,6 +100,12 @@ docker compose up
 docker compose down
 ```
 
+#### 🔧 Want to modify the database schema?
+
+If you're adding new models to the Prisma schema, see:
+
+- [`1-Navbar.md`](./notes/Language/1-Navbar.md) – detailed steps on how to apply migrations, handle drift, and seed data in Docker.
+
 ---
 
 ## Detailed configuration steps
