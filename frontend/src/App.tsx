@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import "./App.css";
-import Topbar from "./components/Topbar";
+import Topbar from "./components/Topbar/Topbar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 import type { Language } from "./type";
 
 function App() {
-  // Languages
+  /* Fetch Languages */
   const [languages, setLanguages] = useState<Language[]>([]);
 
-  /* Fetch Languages */
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
