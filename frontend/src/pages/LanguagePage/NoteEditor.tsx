@@ -34,6 +34,12 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
 
   // Save note
   const saveNote = async () => {
+    const trimmed = note.trim();
+    if (trimmed.length === 0) {
+      alert("Cannot save an empty note.");
+      return;
+    }
+
     setIsSaving(true);
     try {
       await fetch("http://localhost:4000/api/user/notes", {
@@ -76,7 +82,7 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
       />
       <button
         onClick={saveNote}
-        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
       >
         {isSaving ? "Saving..." : "Save"}
       </button>
