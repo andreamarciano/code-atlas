@@ -26,7 +26,7 @@ router.post("/register", async (req: Request, res: Response) => {
     data: { username, password },
   });
 
-  res.status(201).json({ message: "User registered", userId: newUser.id }); // Created
+  res.status(201).json({ id: newUser.id, username: newUser.username }); // Created
 });
 
 // LOGIN
@@ -45,7 +45,7 @@ router.post("/login", async (req: Request, res: Response) => {
     return;
   }
 
-  res.status(201).json({ message: "Login successful", userId: user.id });
+  res.status(201).json({ id: user.id, username: user.username });
 });
 
 export default router;

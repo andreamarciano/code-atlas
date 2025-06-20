@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FormEvent, MouseEvent } from "react";
 
+import { useUser } from "../../utils/UserContext";
+
 import Searchbar from "./Searchbar";
 import SignIn from "./SignIn";
 
@@ -33,13 +35,25 @@ function Topbar() {
     }
   };
 
+  /* Auth User */
+  const { user, logout } = useUser();
+
   return (
     <div className="bg-neutral-900 px-6 py-3 shadow flex items-center justify-between">
       <div className="text-lg font-bold text-white">Code Atlas</div>
 
       <Searchbar query={query} setQuery={setQuery} onSearch={handleSearch} />
 
-      <SignIn />
+      {user ? (
+        <div className="text-sm text-white flex gap-4 items-center">
+          <span>👋 {user.username}</span>
+          <button onClick={logout} className="text-red-400 hover:underline">
+            Logout
+          </button>
+        </div>
+      ) : (
+        <SignIn />
+      )}
     </div>
   );
 }

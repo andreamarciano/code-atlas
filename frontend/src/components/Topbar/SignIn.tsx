@@ -1,10 +1,47 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
+import { useUser } from "../../utils/UserContext";
+
 export default function SignIn() {
   const [showMenu, setShowMenu] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { setUser } = useUser();
+
+  const handleSubmit = async () => {
+    const endpoint =
+      authMode === "login" ? "/api/auth/login" : "/api/auth/register";
+
+    try {
+      const res = await fetch(`http://localhost:4000${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+      console.log("Login response:", data);
+
+      if (!res.ok) {
+        alert(data.error || "Authentication failed");
+        return;
+      }
+
+      // Save User
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+      setUsername("");
+      setPassword("");
+      setShowMenu(false);
+    } catch (err) {
+      console.error("Auth error", err);
+      alert("Something went wrong.");
+    }
+  };
 
   return (
     <div className="relative">
@@ -35,12 +72,16 @@ export default function SignIn() {
               <input
                 type="text"
                 placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full mb-4 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
                 <button
@@ -52,7 +93,10 @@ export default function SignIn() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition cursor-pointer">
+              <button
+                onClick={handleSubmit}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition cursor-pointer"
+              >
                 Sign In
               </button>
             </>
@@ -73,12 +117,16 @@ export default function SignIn() {
               <input
                 type="text"
                 placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full mb-4 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
                 <button
@@ -95,7 +143,10 @@ export default function SignIn() {
                 <span className="text-indigo-400">Terms of Service</span> and{" "}
                 <span className="text-indigo-400">Privacy Policy</span>.
               </p>
-              <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition cursor-pointer">
+              <button
+                onClick={handleSubmit}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition cursor-pointer"
+              >
                 Create account
               </button>
             </>
