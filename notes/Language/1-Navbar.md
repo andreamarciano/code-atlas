@@ -36,8 +36,16 @@ docker ps
 
 ### 3. Run the migration *inside* the container
 
+First Migration:
+
 ```text
 /app # npx prisma migrate dev --name init
+```
+
+After first migration:
+
+```text
+/app # npx prisma migrate dev --name new_migration_name
 ```
 
 This will:

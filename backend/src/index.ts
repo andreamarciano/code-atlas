@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import langRoutes from "./routes/languages";
 import authRoutes from "./routes/auth";
+import userDataRoutes from "./routes/userData";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 /* API */
 app.use("/api/languages", langRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userDataRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend running at http://localhost:${PORT}`);

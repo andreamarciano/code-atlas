@@ -1,17 +1,51 @@
-### Register a user POST /AUTH/REGISTER
+### Register a user - POST /AUTH/REGISTER
 POST http://localhost:4000/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "arzi2",
+  "username": "test",
   "password": "123"
 }
 
-### Login a user POST /AUTH/LOGIN
+### Login a user - POST /AUTH/LOGIN
 POST http://localhost:4000/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "arzi2",
+  "username": "test",
   "password": "123"
 }
+
+### Adds a language to a user's favorites - POST /USER/FAVORITES
+POST http://localhost:4000/api/user/favorites
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "languageId": 2
+}
+
+### Removes a language from favorites - DELETE /USER/FAVORITES
+DELETE http://localhost:4000/api/user/favorites
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "languageId": 2
+}
+
+### Returns all of a user's preferred languages - GET /USER/FAVORITES/:userId
+GET http://localhost:4000/api/user/favorites/1
+
+### Save or update a user note about a language - POST /USER/NOTES
+POST http://localhost:4000/api/user/notes
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "languageId": 3,
+  "content": "Review this language."
+}
+
+### Retrieve an existing note - GET /USER/NOTES?userId=&languageId=
+GET http://localhost:4000/api/user/notes?userId=1&languageId=3
