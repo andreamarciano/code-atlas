@@ -8,7 +8,7 @@ import App from "./App.tsx";
 import { UserProvider } from "./utils/UserContext.tsx";
 
 import Home from "./pages/Home.tsx";
-import LanguagePage from "./pages/LanguagePage.tsx";
+import LanguagePage from "./pages/LanguagePage/LanguagePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter([
