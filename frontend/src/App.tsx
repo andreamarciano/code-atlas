@@ -58,7 +58,7 @@ function App() {
       <Topbar />
       <Navbar languages={languages} favoriteLanguages={favoriteLanguages} />
       <main>
-        <Outlet />
+        <Outlet context={{ favoriteLanguages, setFavoriteLanguages, user }} />
       </main>
       <Footer />
     </>

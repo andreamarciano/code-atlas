@@ -9,12 +9,15 @@ async function main() {
     { name: "JavaScript" },
     { name: "TypeScript" },
     { name: "GitHub" },
+    { name: "Markdown" },
     { name: "React" },
     { name: "TailwindCSS" },
     { name: "Node" },
     { name: "Express" },
     { name: "SQL" },
     { name: "Prisma" },
+    { name: "PostgreSQL" },
+    { name: "Docker" },
   ];
 
   for (const lang of initialLanguages) {

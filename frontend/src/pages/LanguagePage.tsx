@@ -1,14 +1,91 @@
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
+import type { Language, User } from "../type";
+
+type ContextType = {
+  favoriteLanguages: number[];
+  setFavoriteLanguages: React.Dispatch<React.SetStateAction<number[]>>;
+  user: User | null;
+};
 
 function LanguagePage() {
   const { name } = useParams<{ name: string }>();
+  const { favoriteLanguages, setFavoriteLanguages, user } =
+    useOutletContext<ContextType>();
+
+  const [language, setLanguage] = useState<Language | null>(null);
+
+  // Fetch Language
+  useEffect(() => {
+    if (!name) return;
+
+    const fetchLanguage = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/languages/${name}`);
+
+        const data = await res.json();
+        setLanguage(data);
+      } catch (err) {
+        console.error("Failed to load language:", err);
+      }
+    };
+
+    fetchLanguage();
+  }, [name]);
+
+  if (!language) return <p>Language not found.</p>;
+
+  const isFavorite = favoriteLanguages.includes(language.id);
+
+  // ADD/REMOVE Favorite
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert("Please log in to manage favorites.");
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        // REMOVE Favorite
+        await fetch("http://localhost:4000/api/user/favorites", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.id, languageId: language.id }),
+        });
+        setFavoriteLanguages((prev) => prev.filter((id) => id !== language.id));
+      } else {
+        // ADD Favorite
+        await fetch("http://localhost:4000/api/user/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.id, languageId: language.id }),
+        });
+        setFavoriteLanguages((prev) => [...prev, language.id]);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      alert("Failed to update favorites.");
+    }
+  };
 
   return (
-    <>
-      <div className="p-4 max-w-xl mx-auto">
-        <h2 className="text-2xl font-bold">Language: {name}</h2>
-      </div>
-    </>
+    <div className="p-4 max-w-xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">{language.name}</h2>
+
+      {/* Favorite */}
+      {user && (
+        <button
+          onClick={toggleFavorite}
+          className={`px-4 py-2 rounded ${
+            isFavorite ? "bg-purple-700 text-white" : "bg-gray-300"
+          }`}
+        >
+          {isFavorite ? "Remove from favorites" : "Add to favorites"}
+        </button>
+      )}
+
+      {/* Notes */}
+    </div>
   );
 }
 
