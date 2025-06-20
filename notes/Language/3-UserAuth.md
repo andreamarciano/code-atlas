@@ -1,6 +1,7 @@
-# 🔐 3 - Login and Register System
+# 🔐 3 - User Authentication and Personalized Features
 
 This step adds basic user authentication to the Code Atlas backend using **Prisma**, **PostgreSQL**, and **Express**.
+Once authentication is set up, we’ll demonstrate how the frontend can interact with the backend to provide user-specific features like favoriting languages and saving personal notes.
 
 ## Table of Contents
 
@@ -12,6 +13,8 @@ Backend:
 - [Test the endpoints](#test)
 
 Frontend:
+
+- [Frontend](#frontend)
 
 ---
 
@@ -365,3 +368,49 @@ codeatlas=# select * from "Note";
   2 | Review this language.              |      1 |          3
 (2 rows)
 ```
+
+---
+
+## Frontend {#frontend}
+
+### 🧠 Context Management
+
+We created a `UserContext` using React’s Context API to manage the logged-in user's state globally.
+It provides access to:
+
+- The current user object (`id`, `username`)
+- A method to set the user after login/register
+- A `logout()` method to clear local storage and context
+
+```tsx
+const { user, setUser, logout } = useUser();
+```
+
+### 💾 User Persistence
+
+When a user logs in or registers, the response from the backend is stored in `localStorage`, so the session persists across page reloads.
+On app start, we check `localStorage` to restore the user context.
+
+### 📦 Fetching User Data
+
+Once a user is logged in, the app automatically fetches:
+
+- The list of **all languages** (from `/api/languages`)
+- The list of **favorite language IDs** specific to the logged-in user (`/api/user/favorites/:userId`)
+
+These are stored in state and passed down as props to components like the `Navbar` and `LanguagePage`.
+
+### ⭐ Favorite Languages
+
+Logged-in users see an additional **"favorite"** button on each language page.
+
+- Clicking it adds/removes the language from their personal favorites list.
+- The navbar highlights favorite languages (via ID matching) for easy access.
+
+### 📝 Personal Notes per Language
+
+Each user can save notes for individual languages:
+
+- Notes are stored in the `Note` table, associated with both the user and the language.
+- The `NoteEditor` component fetches existing notes (if any) and allows saving via a POST request to `/api/user/notes`.
+- The note field supports simple text editing and manual saving.
