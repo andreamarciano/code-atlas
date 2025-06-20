@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import type { Language } from "../type";
 
 type NavbarProps = {
@@ -100,19 +102,7 @@ function Navbar({ languages }: NavbarProps) {
           onPointerLeave={handlePointerUp}
           className="absolute left-2 z-10 bg-neutral-900 bg-opacity-70 rounded-full p-1 hover:bg-opacity-100 transition"
         >
-          <svg
-            className="w-6 h-6 text-yellow-400"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ChevronLeft size={24} className="text-yellow-400" />
         </button>
       )}
 
@@ -161,19 +151,7 @@ function Navbar({ languages }: NavbarProps) {
           onPointerLeave={handlePointerUp}
           className="absolute right-2 z-10 bg-neutral-900 bg-opacity-70 rounded-full p-1 hover:bg-opacity-100 transition"
         >
-          <svg
-            className="w-6 h-6 text-yellow-400"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <ChevronRight size={24} className="text-yellow-400" />
         </button>
       )}
     </nav>
