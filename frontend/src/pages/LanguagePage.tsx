@@ -1,5 +1,7 @@
 import { useParams, useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Star, StarOff } from "lucide-react";
+
 import type { Language, User } from "../type";
 
 type ContextType = {
@@ -33,7 +35,7 @@ function LanguagePage() {
     fetchLanguage();
   }, [name]);
 
-  if (!language) return <p>Language not found.</p>;
+  if (!language) return;
 
   const isFavorite = favoriteLanguages.includes(language.id);
 
@@ -70,19 +72,27 @@ function LanguagePage() {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">{language.name}</h2>
+      <div className="flex items-center justify-center gap-1 mb-4">
+        <h2 className="text-2xl font-bold">{language.name}</h2>
 
-      {/* Favorite */}
-      {user && (
-        <button
-          onClick={toggleFavorite}
-          className={`px-4 py-2 rounded ${
-            isFavorite ? "bg-purple-700 text-white" : "bg-gray-300"
-          }`}
-        >
-          {isFavorite ? "Remove from favorites" : "Add to favorites"}
-        </button>
-      )}
+        {/* Favorite Icon */}
+        {user && (
+          <button
+            onClick={toggleFavorite}
+            className={`rounded-full p-2 transition-colors cursor-pointer ${
+              isFavorite
+                ? "text-purple-600 hover:text-neutral-500"
+                : "text-neutral-500 hover:text-purple-600"
+            }`}
+            aria-label={
+              isFavorite ? "Remove from favorites" : "Add to favorites"
+            }
+            title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            {isFavorite ? <StarOff /> : <Star />}
+          </button>
+        )}
+      </div>
 
       {/* Notes */}
     </div>

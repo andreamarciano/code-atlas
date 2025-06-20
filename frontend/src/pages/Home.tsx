@@ -31,7 +31,7 @@ function Home() {
 
       <button
         onClick={fetchLanguages}
-        className="mb-4 bg-neutral-900 text-white px-4 py-2 rounded hover:bg-neutral-800 transition-colors cursor-pointer"
+        className="mb-4 bg-neutral-900 text-white px-4 py-2 rounded hover:bg-neutral-700 transition-colors cursor-pointer"
       >
         Load Languages
       </button>
