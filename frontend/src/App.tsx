@@ -3,8 +3,10 @@ import { Outlet } from "react-router-dom";
 
 import "./App.css";
 import Topbar from "./components/Topbar/Topbar";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer";
+
+import { useUser } from "./utils/UserContext";
 
 import type { Language } from "./type";
 
@@ -25,10 +27,36 @@ function App() {
     fetchLanguages();
   }, []);
 
+  /* Fetch User Favorite Languages */
+  const { user } = useUser();
+  const [favoriteLanguages, setFavoriteLanguages] = useState<number[]>([]);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!user) {
+        setFavoriteLanguages([]);
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `http://localhost:4000/api/user/favorites/${user.id}`
+        );
+
+        const data = await res.json();
+        setFavoriteLanguages(data.map((lang: Language) => lang.id));
+      } catch (err) {
+        console.error("Error loading favorites:", err);
+      }
+    };
+
+    fetchFavorites();
+  }, [user]);
+
   return (
     <>
       <Topbar />
-      <Navbar languages={languages} />
+      <Navbar languages={languages} favoriteLanguages={favoriteLanguages} />
       <main>
         <Outlet />
       </main>

@@ -1,15 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import type { Language } from "../type";
-
-type NavbarProps = {
-  languages: Language[];
+type ScrollableMenuProps = {
+  children: ReactNode;
 };
 
-function Navbar({ languages }: NavbarProps) {
-  // Scroll
+export default function ScrollableMenu({ children }: ScrollableMenuProps) {
   const scrollRef = useRef<HTMLUListElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -41,7 +37,7 @@ function Navbar({ languages }: NavbarProps) {
       element.removeEventListener("scroll", updateScrollButtons);
       window.removeEventListener("resize", updateScrollButtons);
     };
-  }, [languages]);
+  }, [children]);
 
   // Animate horizontal scroll in given direction
   const scrollByStep = (direction: "left" | "right") => {
@@ -49,7 +45,6 @@ function Navbar({ languages }: NavbarProps) {
     if (!element) return null;
 
     const step = 15 * (direction === "left" ? -1 : 1);
-
     let animFrameId: number;
 
     const scrollStep = () => {
@@ -73,7 +68,6 @@ function Navbar({ languages }: NavbarProps) {
     };
 
     scrollStep();
-
     return () => cancelAnimationFrame(animFrameId);
   };
 
@@ -92,7 +86,7 @@ function Navbar({ languages }: NavbarProps) {
   };
 
   return (
-    <nav className="bg-neutral-800 text-white px-6 py-4 shadow relative flex items-center">
+    <div className="relative flex items-center">
       {/* Arrow Left */}
       {canScrollLeft && (
         <button
@@ -112,34 +106,7 @@ function Navbar({ languages }: NavbarProps) {
         className="flex space-x-8 font-semibold overflow-x-hidden whitespace-nowrap scrollbar-hide"
         role="menubar"
       >
-        <li className="inline-block" role="none">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive
-                ? "text-yellow-400"
-                : "hover:text-yellow-300 transition-colors"
-            }
-            role="menuitem"
-          >
-            Home
-          </NavLink>
-        </li>
-        {languages.map((lang) => (
-          <li key={lang.id} className="inline-block" role="none">
-            <NavLink
-              to={`/language/${lang.name.toLowerCase()}`}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-yellow-400"
-                  : "hover:text-yellow-300 transition-colors"
-              }
-              role="menuitem"
-            >
-              {lang.name}
-            </NavLink>
-          </li>
-        ))}
+        {children}
       </ul>
 
       {/* Arrow Right */}
@@ -154,8 +121,6 @@ function Navbar({ languages }: NavbarProps) {
           <ChevronRight size={24} className="text-yellow-400" />
         </button>
       )}
-    </nav>
+    </div>
   );
 }
-
-export default Navbar;

@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import type { FormEvent, MouseEvent } from "react";
 
 import { useUser } from "../../utils/UserContext";
 
