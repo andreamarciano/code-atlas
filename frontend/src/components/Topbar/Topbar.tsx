@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/UserContext";
 
 import Searchbar from "./Searchbar";
-import SignIn from "./SignIn";
-import SignedInMenu from "./SignedInMenu";
+import SignIn from "./SignIn/SignIn";
+import SignedInMenu from "./SignIn/SignedInMenu";
 
 function Topbar() {
   /* Search State */

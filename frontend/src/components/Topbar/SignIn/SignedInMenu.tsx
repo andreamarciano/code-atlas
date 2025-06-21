@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CircleUser, ChevronDown, LogOut, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useUser } from "../../utils/UserContext";
+import { useUser } from "../../../utils/UserContext";
 
 export default function SignedInMenu() {
   /* Auth User */
