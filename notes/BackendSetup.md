@@ -31,7 +31,7 @@ npm init -y
 ### Runtime dependencies
 
 ```bash
-npm install express dotenv cors @prisma/client pg 
+npm install express dotenv cors @prisma/client pg bcryptjs jsonwebtoken
 ```
 
 - `express`: Web framework.
@@ -39,11 +39,13 @@ npm install express dotenv cors @prisma/client pg
 - `cors`: Middleware to enable Cross-Origin requests from the frontend.
 - `@prisma/client`: Auto-generated Prisma client.
 - `pg`: PostgreSQL client for Node.js.
+- `bcryptjs`: Password hashing library.
+- `jsonwebtoken`: Create and verify JWT tokens.
 
 ### Development dependencies
 
 ```bash
-npm install -D prisma typescript ts-node nodemon @types/node @types/express @types/cors
+npm install -D prisma typescript ts-node nodemon @types/node @types/express @types/cors @types/bcryptjs @types/jsonwebtoken
 ```
 
 - `prisma`: Prisma CLI (schema management, migrations).

@@ -29,16 +29,22 @@ export default function FavoriteButton({
         // REMOVE
         await fetch("http://localhost:4000/api/user/favorites", {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: user.id, languageId: language.id }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ languageId: language.id }),
         });
         setFavoriteLanguages((prev) => prev.filter((id) => id !== language.id));
       } else {
         // ADD
         await fetch("http://localhost:4000/api/user/favorites", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: user.id, languageId: language.id }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ languageId: language.id }),
         });
         setFavoriteLanguages((prev) => [...prev, language.id]);
       }

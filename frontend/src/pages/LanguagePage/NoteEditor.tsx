@@ -19,7 +19,12 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
     const fetchNote = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/user/notes?userId=${user.id}&languageId=${languageId}`
+          `http://localhost:4000/api/user/notes?languageId=${languageId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
 
         const data = await res.json();
@@ -44,8 +49,11 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
     try {
       await fetch("http://localhost:4000/api/user/notes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, languageId, content: note }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ languageId, content: note }),
       });
 
       // delay

@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import prisma from "../prismaClient";
+import { AuthRequest } from "../types/auth";
 
 const router = Router();
 
@@ -7,7 +8,8 @@ const router = Router();
 
 // Adds a language to a user's favorites
 router.post("/favorites", async (req: Request, res: Response) => {
-  const { userId, languageId } = req.body;
+  const userId = (req as AuthRequest).userId;
+  const { languageId } = req.body;
 
   try {
     const favorite = await prisma.favoriteLanguage.create({
@@ -22,7 +24,8 @@ router.post("/favorites", async (req: Request, res: Response) => {
 
 // Removes a language from favorites
 router.delete("/favorites", async (req: Request, res: Response) => {
-  const { userId, languageId } = req.body;
+  const userId = (req as AuthRequest).userId;
+  const { languageId } = req.body;
 
   try {
     await prisma.favoriteLanguage.deleteMany({
@@ -36,8 +39,8 @@ router.delete("/favorites", async (req: Request, res: Response) => {
 });
 
 // Returns all of a user's preferred languages
-router.get("/favorites/:userId", async (req, res) => {
-  const userId = parseInt(req.params.userId);
+router.get("/favorites", async (req, res) => {
+  const userId = (req as AuthRequest).userId;
 
   const favorites = await prisma.favoriteLanguage.findMany({
     where: { userId },
@@ -51,7 +54,8 @@ router.get("/favorites/:userId", async (req, res) => {
 
 // Save or update a user note about a language
 router.post("/notes", async (req, res) => {
-  const { userId, languageId, content } = req.body;
+  const userId = (req as AuthRequest).userId;
+  const { languageId, content } = req.body;
 
   const existing = await prisma.note.findFirst({
     where: { userId, languageId },
@@ -73,7 +77,7 @@ router.post("/notes", async (req, res) => {
 
 // Retrieve an existing note
 router.get("/notes", async (req, res) => {
-  const userId = parseInt(req.query.userId as string);
+  const userId = (req as AuthRequest).userId;
   const languageId = parseInt(req.query.languageId as string);
 
   const note = await prisma.note.findFirst({

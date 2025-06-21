@@ -4,6 +4,7 @@ services:
     container_name: codeatlas-app
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/codeatlas
+      - JWT_SECRET=superSecretTokenKey123
       - NODE_ENV=development
       - PORT=4000
     ports:

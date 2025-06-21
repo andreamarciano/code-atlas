@@ -414,3 +414,20 @@ Each user can save notes for individual languages:
 - Notes are stored in the `Note` table, associated with both the user and the language.
 - The `NoteEditor` component fetches existing notes (if any) and allows saving via a POST request to `/api/user/notes`.
 - The note field supports simple text editing and manual saving.
+
+---
+
+## Next Steps
+
+The implementation we just covered provides basic username and password authentication without strict validation or secure password handling.
+
+In the next step, we’ll improve this setup by adding:
+
+- **Secure password hashing** with `bcryptjs`
+- **Token-based authentication** using **JWT**
+- **Middleware to protect sensitive routes**
+- Better **frontend handling** of authentication tokens
+
+For a more robust and secure authentication flow, check out the next guide:
+
+🔐 [4 - Advanced User Authentication with JWT and Bcrypt](./4-UserAuthAdvanced.md)

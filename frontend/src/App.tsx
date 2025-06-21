@@ -39,9 +39,11 @@ function App() {
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:4000/api/user/favorites/${user.id}`
-        );
+        const res = await fetch("http://localhost:4000/api/user/favorites", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
         const data = await res.json();
         setFavoriteLanguages(data.map((lang: Language) => lang.id));

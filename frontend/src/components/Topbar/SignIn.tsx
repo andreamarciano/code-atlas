@@ -7,12 +7,31 @@ export default function SignIn() {
   const [showMenu, setShowMenu] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [focusedField, setFocusedField] = useState<
+    "username" | "password" | null
+  >(null);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useUser();
 
   const handleSubmit = async () => {
+    if (authMode === "register") {
+      if (username.length < 3) {
+        alert("Username must be at least 3 characters long.");
+        return;
+      }
+
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        alert(
+          "Password must be at least 8 characters and contain uppercase, lowercase, and a number, and a special character (!@#$%^&*)"
+        );
+        return;
+      }
+    }
+
     const endpoint =
       authMode === "login" ? "/api/auth/login" : "/api/auth/register";
 
@@ -24,7 +43,9 @@ export default function SignIn() {
       });
 
       const data = await res.json();
-      console.log("Login response:", data);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
       if (!res.ok) {
         alert(data.error || "Authentication failed");
@@ -119,16 +140,29 @@ export default function SignIn() {
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onFocus={() => setFocusedField("username")}
                 className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
+              {authMode === "register" && focusedField === "username" && (
+                <p className="text-xs text-neutral-400 mb-3">
+                  Username must be at least 3 characters long.
+                </p>
+              )}
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusedField("password")}
                   className="w-full mb-4 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
+                {authMode === "register" && focusedField === "password" && (
+                  <p className="text-xs text-neutral-400 mb-4">
+                    Password must be at least 8 characters, contain uppercase,
+                    lowercase, a number, and a special character (!@#$%^&*).
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
