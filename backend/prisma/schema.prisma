@@ -15,11 +15,16 @@ model Language {
 }
 
 model User {
-  id       Int                @id @default(autoincrement())
-  username String             @unique
-  password String
-  favorite FavoriteLanguage[]
-  Note     Note[]
+  id         Int                @id @default(autoincrement())
+  username   String             @unique
+  password   String
+  email      String             @unique
+  firstName  String?
+  lastName   String?
+  birthDate  DateTime
+  newsletter Boolean            @default(false)
+  favorite   FavoriteLanguage[]
+  Note       Note[]
 }
 
 // Many-to-many
@@ -27,7 +32,7 @@ model FavoriteLanguage {
   id         Int      @id @default(autoincrement())
   userId     Int
   languageId Int
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   language   Language @relation(fields: [languageId], references: [id])
 
   @@unique([userId, languageId])
@@ -39,6 +44,6 @@ model Note {
   content    String
   userId     Int
   languageId Int
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   language   Language @relation(fields: [languageId], references: [id])
 }

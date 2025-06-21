@@ -11,6 +11,9 @@ import Home from "./pages/Home.tsx";
 import LanguagePage from "./pages/LanguagePage/LanguagePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+import { ProtectedRoute } from "./pages/Profile/ProtectedRoute.tsx";
+import Profile from "./pages/Profile/Profile.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,6 +23,10 @@ const router = createBrowserRouter([
       { path: "language/:name", element: <LanguagePage /> },
       { path: "*", element: <NotFound /> },
     ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [{ path: "/profile", element: <Profile /> }],
   },
 ]);
 

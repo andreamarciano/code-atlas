@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import langRoutes from "./routes/languages";
 import authRoutes from "./routes/auth";
 import userDataRoutes from "./routes/userData";
+import profileRoutes from "./routes/profile";
 
 import { verifyToken } from "./middleware/verifyToken";
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/languages", langRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", verifyToken, userDataRoutes);
+app.use("/api/profile", verifyToken, profileRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend running at http://localhost:${PORT}`);

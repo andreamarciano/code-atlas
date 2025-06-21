@@ -60,15 +60,39 @@ Exit the container after migration:
 /app # exit
 ```
 
-### ❗ If you see a "drift detected" error
+---
 
-This means the actual database schema is **out of sync** with the migration history (e.g. you deleted `/migrations`, but the database still has tables and records).
+### 🚀 Recommended workflow during development
 
-You have two options to reset the database:
+During development, when you don’t have important production data yet, **it’s highly recommended to reset the database and migrations often**, to keep your migration files clean and avoid accumulating many messy or partial migrations.
 
-#### Option A: Reset with Prisma
+This means:
 
-```sh
+- Instead of trying to patch migrations continuously,
+- You delete all migrations and reset the database,
+- Then generate a fresh single migration that reflects the current schema.
+
+This approach prevents errors related to conflicting migrations or schema drifts.
+
+A typical reset sequence inside your project folder is:
+
+```bash
+rm -rf prisma/migrations          # Delete all migration files
+npx prisma migrate reset          # Drop and recreate the database, apply schema, regenerate client
+npx prisma migrate dev --name init_all  # Create a fresh initial migration from current schema
+```
+
+---
+
+### ❗ If you see a "drift detected" or migration errors
+
+This means the actual database schema is **out of sync** with the migration history (for example, if you deleted the `/prisma/migrations` folder but the database still has tables and data).
+
+You have two options to reset the database and start fresh:
+
+#### Option A: Reset with Prisma CLI (quick and clean)
+
+```bash
 npx prisma migrate reset
 ```
 
@@ -79,9 +103,15 @@ This will:
 - Optionally run your seed script
 - Regenerate Prisma Client
 
-#### Option B: Reset Docker volumes (full wipe)
+After reset, you can create a fresh migration if needed:
 
-If you're using Docker volumes (e.g. persistent Postgres data), you can do:
+```bash
+npx prisma migrate dev --name init_all
+```
+
+#### Option B: Reset Docker volumes (full data wipe)
+
+If you are using Docker volumes for your PostgreSQL container and want to wipe everything including persisted data:
 
 ```bash
 docker compose down -v
@@ -92,6 +122,8 @@ Then restart everything:
 ```bash
 docker compose up --build
 ```
+
+This deletes all volumes (including the database data) so it’s a full reset.
 
 ### 4. Stop containers (optional)
 

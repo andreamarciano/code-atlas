@@ -6,4 +6,9 @@ export type Language = {
 export type User = {
   id: number;
   username: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  birthDate: string;
+  newsletter: boolean;
 };

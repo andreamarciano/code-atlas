@@ -8,18 +8,39 @@ const jwtSecret = process.env.JWT_SECRET!;
 
 // REGISTER
 router.post("/register", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const {
+    username,
+    password,
+    email,
+    firstName,
+    lastName,
+    birthDate,
+    newsletter,
+  } = req.body;
+
+  /* Check Data */
 
   if (!username || !password) {
     res.status(400).json({ error: "Username and password required" }); // Bad Request
     return;
   }
 
+  // email
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "Valid email is required" });
+    return;
+  }
+  //age
+  if (!birthDate) {
+    res.status(400).json({ error: "Birth date is required" });
+    return;
+  }
+  // username
   if (username.length < 3) {
     res.status(400).json({ error: "Username must be at least 3 characters" });
     return;
   }
-
+  // password
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
   if (!passwordRegex.test(password)) {
     res.status(400).json({
@@ -43,7 +64,15 @@ router.post("/register", async (req: Request, res: Response) => {
 
   // Save new user to the db
   const newUser = await prisma.user.create({
-    data: { username, password: hashedPassword },
+    data: {
+      username,
+      password: hashedPassword,
+      email,
+      firstName,
+      lastName,
+      birthDate: new Date(birthDate),
+      newsletter: Boolean(newsletter),
+    },
   });
 
   // Generate token
@@ -51,7 +80,15 @@ router.post("/register", async (req: Request, res: Response) => {
     expiresIn: "24h",
   });
 
-  res.status(201).json({ username: newUser.username, token }); // Created
+  res.status(201).json({
+    username: newUser.username,
+    token,
+    email: newUser.email,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    birthDate: newUser.birthDate,
+    newsletter: newUser.newsletter,
+  }); // Created
 });
 
 // LOGIN

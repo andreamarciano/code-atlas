@@ -11,23 +11,55 @@ export default function SignIn() {
     "username" | "password" | null
   >(null);
 
+  // User Data
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [newsletter, setNewsletter] = useState(false);
+  // Date Field
+  const today = new Date();
+  const maxDate = today.toISOString().split("T")[0]; // today
+  const hundredYearsAgo = new Date();
+  hundredYearsAgo.setFullYear(today.getFullYear() - 100);
+  const minDate = hundredYearsAgo.toISOString().split("T")[0]; // max 100 years
+
   const { setUser } = useUser();
 
   const handleSubmit = async () => {
     if (authMode === "register") {
+      // username
       if (username.length < 3) {
         alert("Username must be at least 3 characters long.");
         return;
       }
 
+      // password
       const passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
       if (!passwordRegex.test(password)) {
         alert(
           "Password must be at least 8 characters and contain uppercase, lowercase, and a number, and a special character (!@#$%^&*)"
         );
+        return;
+      }
+
+      // email
+      if (!email.includes("@")) {
+        alert("Email is invalid.");
+        return;
+      }
+
+      // age
+      if (!birthDate) {
+        alert("Please select a birth date.");
+        return;
+      }
+      const age = new Date().getFullYear() - new Date(birthDate).getFullYear();
+      if (age < 18) {
+        alert("You must be at least 18 years old.");
         return;
       }
     }
@@ -39,7 +71,19 @@ export default function SignIn() {
       const res = await fetch(`http://localhost:4000${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(
+          authMode === "login"
+            ? { username, password }
+            : {
+                username,
+                password,
+                email,
+                firstName,
+                lastName,
+                birthDate,
+                newsletter,
+              }
+        ),
       });
 
       const data = await res.json();
@@ -57,6 +101,11 @@ export default function SignIn() {
       setUser(data);
       setUsername("");
       setPassword("");
+      setEmail("");
+      setFirstName("");
+      setLastName("");
+      setBirthDate("");
+      setNewsletter(false);
       setShowMenu(false);
     } catch (err) {
       console.error("Auth error", err);
@@ -135,6 +184,37 @@ export default function SignIn() {
                   Sign In
                 </button>
               </p>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-1/2 mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-1/2 mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+              </div>
+              <input
+                type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                min={minDate}
+                max={maxDate}
+                className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
               <input
                 type="text"
                 placeholder="Username"
@@ -177,6 +257,15 @@ export default function SignIn() {
                 <span className="text-indigo-400">Terms of Service</span> and{" "}
                 <span className="text-indigo-400">Privacy Policy</span>.
               </p>
+              <div className="flex items-center space-x-2 text-neutral-300 text-sm mb-4">
+                <input
+                  type="checkbox"
+                  checked={newsletter}
+                  onChange={() => setNewsletter(!newsletter)}
+                  className="form-checkbox h-4 w-4 text-indigo-600"
+                />
+                <span>Subscribe to newsletter</span>
+              </div>
               <button
                 onClick={handleSubmit}
                 className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition cursor-pointer"
