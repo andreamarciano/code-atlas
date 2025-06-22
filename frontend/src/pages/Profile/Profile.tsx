@@ -2,26 +2,32 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/UserContext";
 
-type Note = {
-  id: number;
-  content: string;
-  language: {
-    id: number;
-    name: string;
-  };
-};
+import type { Note } from "../../type";
+type SectionType = "personal" | "account" | "favorites" | "notes";
 
 export default function Profile() {
-  const { user, logout } = useUser();
+  const { user, setUser, logout } = useUser();
   const navigate = useNavigate();
-  const [section, setSection] = useState<
-    "personal" | "account" | "favorites" | "notes"
-  >("personal");
+
+  const sections: [SectionType, string][] = [
+    ["personal", "📋 Personal Data"],
+    ["account", "🔐 Account"],
+    ["favorites", "⭐ My Favorite Languages"],
+    ["notes", "📝 My Notes"],
+  ];
+  const [section, setSection] = useState<SectionType>("personal");
+
   const [favorites, setFavorites] = useState<{ id: number; name: string }[]>(
     []
   );
   const [notes, setNotes] = useState<Note[]>([]);
 
+  const [newEmail, setNewEmail] = useState(user?.email);
+  const [newsletterStatus, setNewsletterStatus] = useState(user?.newsletter);
+  const [emailMessage, setEmailMessage] = useState("");
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+
+  /* Fetch User Data */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,6 +57,7 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  /* Delete User   */
   const handleDelete = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete your account? This action is irreversible."
@@ -78,10 +85,65 @@ export default function Profile() {
 
   if (!user) return null; // safety
 
+  /* Email and Newsletter Changes */
+
+  const handleEmailChange = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:4000/api/profile/email", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email: newEmail }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Unknown error");
+
+      setUser({ ...user, email: data.email });
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...user, email: data.email })
+      );
+      setEmailMessage("Email updated successfully");
+    } catch (err) {
+      setEmailMessage(`${err}`);
+    }
+  };
+
+  const handleNewsletterToggle = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:4000/api/profile/newsletter", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ newsletter: !newsletterStatus }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Unknown error");
+
+      setNewsletterStatus(data.newsletter);
+      setUser({ ...user, newsletter: data.newsletter });
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...user, newsletter: data.newsletter })
+      );
+      setNewsletterMessage("Newsletter preference updated");
+    } catch (err) {
+      setNewsletterMessage(`${err}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex">
       {/* Navbar */}
-      <div className="absolute top-0 left-0 w-full bg-gray-800 flex items-center justify-between px-6 py-3 shadow-md">
+      <div className="absolute top-0 left-0 w-full bg-gray-800 flex items-center justify-between px-6 py-3 shadow-xl">
         <div
           className="font-bold text-xl cursor-pointer"
           onClick={() => navigate("/")}
@@ -102,13 +164,20 @@ export default function Profile() {
       </div>
 
       {/* Sidebar */}
-      <aside className="w-60 pt-20 p-4 bg-gray-800 flex flex-col gap-4">
-        <button onClick={() => setSection("personal")}>📋 Personal Data</button>
-        <button onClick={() => setSection("account")}>🔐 Account</button>
-        <button onClick={() => setSection("favorites")}>
-          ⭐ My Favorite Languages
-        </button>
-        <button onClick={() => setSection("notes")}>📝 My Notes</button>
+      <aside className="w-64 pt-20 p-4 bg-gray-800 flex flex-col gap-4 border-r border-gray-700">
+        {sections.map(([key, label]) => (
+          <button
+            key={key}
+            onClick={() => setSection(key)}
+            className={`text-left px-3 py-2 rounded cursor-pointer ${
+              section === key
+                ? "bg-gray-700 text-white font-semibold"
+                : "text-gray-300 hover:bg-gray-700"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </aside>
 
       {/* Main Section */}
@@ -134,13 +203,42 @@ export default function Profile() {
               {new Date(user.birthDate).toLocaleDateString()}
             </p>
 
-            <div className="mt-4 space-x-2">
-              <button className="px-4 py-2 bg-blue-600 rounded">
-                Change Email
-              </button>
-              <button className="px-4 py-2 bg-blue-600 rounded">
-                Manage Newsletter
-              </button>
+            <div className="mt-4 space-y-4 max-w-md">
+              <div>
+                <label className="block mb-1">Change Email</label>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  className="w-full p-2 rounded text-black"
+                />
+                <button
+                  onClick={handleEmailChange}
+                  className="mt-2 px-4 py-2 bg-blue-600 rounded"
+                >
+                  Update Email
+                </button>
+                {emailMessage && <p className="text-sm mt-1">{emailMessage}</p>}
+              </div>
+
+              <div>
+                <label className="block mb-1">Newsletter Subscription</label>
+                <p className="mb-1">
+                  You are currently{" "}
+                  <strong>
+                    {newsletterStatus ? "subscribed" : "not subscribed"}
+                  </strong>
+                </p>
+                <button
+                  onClick={handleNewsletterToggle}
+                  className="px-4 py-2 bg-blue-600 rounded"
+                >
+                  {newsletterStatus ? "Unsubscribe" : "Subscribe"}
+                </button>
+                {newsletterMessage && (
+                  <p className="text-sm mt-1">{newsletterMessage}</p>
+                )}
+              </div>
             </div>
           </section>
         )}

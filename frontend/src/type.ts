@@ -12,3 +12,12 @@ export type User = {
   birthDate: string;
   newsletter: boolean;
 };
+
+export type Note = {
+  id: number;
+  content: string;
+  language: {
+    id: number;
+    name: string;
+  };
+};
