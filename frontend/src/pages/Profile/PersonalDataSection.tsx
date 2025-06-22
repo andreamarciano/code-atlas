@@ -1,4 +1,5 @@
 import { useUser } from "../../utils/UserContext";
+import { ClipboardList, CheckCircle, Mail, User, Calendar } from "lucide-react";
 
 interface PersonalDataProps {
   newEmail: string;
@@ -78,62 +79,101 @@ export default function PersonalDataSection({
   };
 
   return (
-    <section>
-      <h2 className="text-2xl font-bold mb-4">📋 Personal Data</h2>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Newsletter:</strong>{" "}
-        {user.newsletter ? "Registered" : "Not registered"}
-      </p>
-      <p>
-        <strong>First Name:</strong> {user.firstName || "Not specified"}
-      </p>
-      <p>
-        <strong>Last Name:</strong> {user.lastName || "Not specified"}
-      </p>
-      <p>
-        <strong>Date of birth: </strong>
-        {new Date(user.birthDate).toLocaleDateString()}
-      </p>
+    <section className="bg-gray-800 rounded-2xl p-6 shadow-lg max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+        <ClipboardList className="w-6 h-6"/> Personal Data
+      </h2>
 
-      <div className="mt-4 space-y-4 max-w-md">
-        <div>
-          <label className="block mb-1">Change Email</label>
+      {/* User Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="space-y-2">
+          <p className="flex items-center gap-2">
+            <Mail className="w-5 h-5 text-blue-400" />
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p className="flex items-center gap-2">
+            <User className="w-5 h-5 text-blue-400" />
+            <strong>First Name:</strong> {user.firstName || "Not specified"}
+          </p>
+          <p className="flex items-center gap-2">
+            <User className="w-5 h-5 text-blue-400" />
+            <strong>Last Name:</strong> {user.lastName || "Not specified"}
+          </p>
+        </div>
+        <div className="space-y-2">
+          <p className="flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-blue-400" />
+            <strong>Date of Birth:</strong>{" "}
+            {new Date(user.birthDate).toLocaleDateString()}
+          </p>
+          <p className="flex items-center gap-2">
+            <CheckCircle
+              className={`w-5 h-5 ${
+                user.newsletter ? "text-green-400" : "text-red-400"
+              }`}
+            />
+            <strong>Newsletter:</strong>{" "}
+            {user.newsletter ? "Subscribed" : "Not subscribed"}
+          </p>
+        </div>
+      </div>
+
+      {/* Email Update Form */}
+      <div className="bg-gray-700 p-4 rounded-xl mb-6">
+        <h3 className="text-xl font-semibold mb-2">📨 Update Email</h3>
+        <div className="space-y-2">
           <input
             type="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            className="w-full p-2 rounded text-black"
+            placeholder="Enter new email"
+            className="w-full p-2 rounded"
           />
           <button
             onClick={handleEmailChange}
-            className="mt-2 px-4 py-2 bg-blue-600 rounded"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white cursor-pointer"
           >
             Update Email
           </button>
-          {emailMessage && <p className="text-sm mt-1">{emailMessage}</p>}
-        </div>
-
-        <div>
-          <label className="block mb-1">Newsletter Subscription</label>
-          <p className="mb-1">
-            You are currently{" "}
-            <strong>
-              {newsletterStatus ? "subscribed" : "not subscribed"}
-            </strong>
-          </p>
-          <button
-            onClick={handleNewsletterToggle}
-            className="px-4 py-2 bg-blue-600 rounded"
-          >
-            {newsletterStatus ? "Unsubscribe" : "Subscribe"}
-          </button>
-          {newsletterMessage && (
-            <p className="text-sm mt-1">{newsletterMessage}</p>
+          {emailMessage && (
+            <p
+              className={`text-sm ${
+                emailMessage.includes("✅") ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {emailMessage}
+            </p>
           )}
         </div>
+      </div>
+
+      {/* Newsletter Toggle */}
+      <div className="bg-gray-700 p-4 rounded-xl">
+        <h3 className="text-xl font-semibold mb-2">
+          📰 Newsletter Subscription
+        </h3>
+        <p className="mb-2">
+          You are currently{" "}
+          <strong>{newsletterStatus ? "subscribed" : "not subscribed"}</strong>{" "}
+          to the newsletter.
+        </p>
+        <button
+          onClick={handleNewsletterToggle}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white cursor-pointer"
+        >
+          {newsletterStatus ? "Unsubscribe" : "Subscribe"}
+        </button>
+        {newsletterMessage && (
+          <p
+            className={`text-sm mt-2 ${
+              newsletterMessage.includes("✅")
+                ? "text-green-400"
+                : "text-red-400"
+            }`}
+          >
+            {newsletterMessage}
+          </p>
+        )}
       </div>
     </section>
   );

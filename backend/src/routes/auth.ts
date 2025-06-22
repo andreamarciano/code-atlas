@@ -109,6 +109,7 @@ router.post("/register", async (req: Request, res: Response) => {
     expiresIn: "24h",
   });
 
+  // User Created
   res.status(201).json({
     username: newUser.username,
     token,
@@ -117,7 +118,7 @@ router.post("/register", async (req: Request, res: Response) => {
     lastName: newUser.lastName,
     birthDate: newUser.birthDate,
     newsletter: newUser.newsletter,
-  }); // Created
+  });
 });
 
 // LOGIN
@@ -147,7 +148,15 @@ router.post("/login", async (req: Request, res: Response) => {
     expiresIn: "24h",
   });
 
-  res.status(200).json({ username: user.username, token });
+  res.status(200).json({
+    username: user.username,
+    token,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    birthDate: user.birthDate,
+    newsletter: user.newsletter,
+  });
 });
 
 export default router;
