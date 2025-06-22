@@ -87,4 +87,16 @@ router.get("/notes", async (req, res) => {
   res.json(note || { content: "" });
 });
 
+// Retrieve all user notes
+router.get("/notes/all", async (req, res) => {
+  const userId = (req as AuthRequest).userId;
+
+  const notes = await prisma.note.findMany({
+    where: { userId },
+    include: { language: true },
+  });
+
+  res.json(notes);
+});
+
 export default router;

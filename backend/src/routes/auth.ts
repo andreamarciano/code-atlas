@@ -31,13 +31,20 @@ router.post("/register", async (req: Request, res: Response) => {
     res.status(400).json({ error: "Valid email is required" });
     return;
   }
+  // Check if email is already taken
+  const existingEmail = await prisma.user.findUnique({
+    where: { email },
+  });
+  if (existingEmail) {
+    res.status(409).json({ error: "Email already registered" }); // Conflict
+    return;
+  }
 
   // Birhdate
   if (!birthDate) {
     res.status(400).json({ error: "Birth date is required" });
     return;
   }
-
   const date = new Date(birthDate);
   const today = new Date();
   const minBirthDate = new Date(
@@ -50,7 +57,6 @@ router.post("/register", async (req: Request, res: Response) => {
     today.getMonth(),
     today.getDate()
   );
-
   if (date < minBirthDate || date > maxBirthDate) {
     res
       .status(400)
@@ -63,6 +69,14 @@ router.post("/register", async (req: Request, res: Response) => {
     res.status(400).json({ error: "Username must be at least 3 characters" });
     return;
   }
+  // Check if username is already taken
+  const existingUsername = await prisma.user.findUnique({
+    where: { username },
+  });
+  if (existingUsername) {
+    res.status(409).json({ error: "Username already taken" }); // Conflict
+    return;
+  }
 
   // Password
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
@@ -71,15 +85,6 @@ router.post("/register", async (req: Request, res: Response) => {
       error:
         "Password must be at least 8 characters and contain uppercase, lowercase, and a number, and a special character (!@#$%^&*)",
     });
-    return;
-  }
-
-  // Check if username is already taken
-  const existingUsername = await prisma.user.findUnique({
-    where: { username },
-  });
-  if (existingUsername) {
-    res.status(409).json({ error: "Username already taken" }); // Conflict
     return;
   }
 

@@ -2,26 +2,50 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/UserContext";
 
+type Note = {
+  id: number;
+  content: string;
+  language: {
+    id: number;
+    name: string;
+  };
+};
+
 export default function Profile() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
   const [section, setSection] = useState<
     "personal" | "account" | "favorites" | "notes"
   >("personal");
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [notes, setNotes] = useState<
-    { id: number; content: string; language: { name: string } }[]
-  >([]);
+  const [favorites, setFavorites] = useState<{ id: number; name: string }[]>(
+    []
+  );
+  const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:4000/api/user/data", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFavorites(data.favorites || []);
-      setNotes(data.notes || []);
+      try {
+        const token = localStorage.getItem("token");
+
+        // Fetch Favorites
+        const favRes = await fetch("http://localhost:4000/api/user/favorites", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const favData = await favRes.json();
+        setFavorites(favData);
+
+        // Fetch Notes
+        const notesRes = await fetch(
+          "http://localhost:4000/api/user/notes/all",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const notesData = await notesRes.json();
+        setNotes(notesData);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
     };
 
     fetchData();
@@ -65,13 +89,13 @@ export default function Profile() {
           ← Home
         </div>
         <div className="flex gap-3">
-          {favorites.map((name) => (
+          {favorites.map((lang) => (
             <button
-              key={name}
-              onClick={() => navigate(`/language/${name}`)}
+              key={lang.id}
+              onClick={() => navigate(`/language/${lang.name.toLowerCase()}`)}
               className="text-sm text-blue-300 hover:underline"
             >
-              {name}
+              {lang.name}
             </button>
           ))}
         </div>
@@ -106,10 +130,8 @@ export default function Profile() {
               <strong>Last Name:</strong> {user.lastName || "Not specified"}
             </p>
             <p>
-              <strong>Date of birth:</strong>
-              {user.birthDate
-                ? new Date(user.birthDate).toLocaleDateString()
-                : "Not specified"}
+              <strong>Date of birth: </strong>
+              {new Date(user.birthDate).toLocaleDateString()}
             </p>
 
             <div className="mt-4 space-x-2">
@@ -130,9 +152,6 @@ export default function Profile() {
               <strong>Username:</strong> {user.username}
             </p>
             <div className="space-x-2 mt-4">
-              <button className="px-4 py-2 bg-yellow-600 rounded">
-                Change Password
-              </button>
               <button
                 className="px-4 py-2 bg-gray-700 rounded"
                 onClick={logout}
@@ -158,13 +177,15 @@ export default function Profile() {
               {favorites.length === 0 ? (
                 <p>No favorite language.</p>
               ) : (
-                favorites.map((name) => (
-                  <li key={name}>
+                favorites.map((lang) => (
+                  <li key={lang.id}>
                     <button
                       className="text-blue-400 hover:underline"
-                      onClick={() => navigate(`/language/${name}`)}
+                      onClick={() =>
+                        navigate(`/language/${lang.name.toLowerCase()}`)
+                      }
                     >
-                      {name}
+                      {lang.name}
                     </button>
                   </li>
                 ))
