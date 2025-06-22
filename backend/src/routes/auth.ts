@@ -25,22 +25,46 @@ router.post("/register", async (req: Request, res: Response) => {
     return;
   }
 
-  // email
-  if (!email || !email.includes("@")) {
+  // Email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
     res.status(400).json({ error: "Valid email is required" });
     return;
   }
-  //age
+
+  // Birhdate
   if (!birthDate) {
     res.status(400).json({ error: "Birth date is required" });
     return;
   }
-  // username
+
+  const date = new Date(birthDate);
+  const today = new Date();
+  const minBirthDate = new Date(
+    today.getFullYear() - 100,
+    today.getMonth(),
+    today.getDate()
+  );
+  const maxBirthDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
+
+  if (date < minBirthDate || date > maxBirthDate) {
+    res
+      .status(400)
+      .json({ error: "You must be between 18 and 100 years old." });
+    return;
+  }
+
+  // Username
   if (username.length < 3) {
     res.status(400).json({ error: "Username must be at least 3 characters" });
     return;
   }
-  // password
+
+  // Password
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
   if (!passwordRegex.test(password)) {
     res.status(400).json({

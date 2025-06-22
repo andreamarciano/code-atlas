@@ -40,13 +40,13 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
   const maxDate = maxBirthDate.toISOString().split("T")[0];
 
   const validateForm = () => {
-    // username
+    // Username
     if (username.length < 3) {
       alert("Username must be at least 3 characters long.");
       return false;
     }
 
-    // password
+    // Password
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
     if (!passwordRegex.test(password)) {
@@ -56,15 +56,14 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
       return false;
     }
 
-    // email
+    // Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       alert("Invalid email format.");
       return false;
     }
 
-    // birthDate
+    // BirthDate
     if (!birthDate) {
       alert("Please select a birth date.");
       return false;
