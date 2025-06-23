@@ -58,6 +58,8 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  /* Delete User Data */
+
   const deleteAllNotes = async () => {
     const confirm = window.confirm(
       "Are you sure you want to delete all notes?"

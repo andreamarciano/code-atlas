@@ -31,6 +31,11 @@ router.post("/register", async (req: Request, res: Response) => {
     res.status(400).json({ error: "Valid email is required" });
     return;
   }
+  // Check email length
+  if (email.length > 64) {
+    res.status(400).json({ error: "Email is too long (max 64 characters)" });
+    return;
+  }
   // Check if email is already taken
   const existingEmail = await prisma.user.findUnique({
     where: { email },
@@ -64,9 +69,19 @@ router.post("/register", async (req: Request, res: Response) => {
     return;
   }
 
+  // First/Last name
+  if (firstName.length > 15 || lastName.length > 15) {
+    res
+      .status(400)
+      .json({ error: "First or Last name too long (max 15 characters)" });
+    return;
+  }
+
   // Username
-  if (username.length < 3) {
-    res.status(400).json({ error: "Username must be at least 3 characters" });
+  if (username.length < 3 || username.length > 15) {
+    res
+      .status(400)
+      .json({ error: "Username must be between 3 and 15 characters" });
     return;
   }
   // Check if username is already taken
@@ -85,6 +100,10 @@ router.post("/register", async (req: Request, res: Response) => {
       error:
         "Password must be at least 8 characters and contain uppercase, lowercase, and a number, and a special character (!@#$%^&*)",
     });
+    return;
+  }
+  if (password.length > 20) {
+    res.status(400).json({ error: "Password is too long (max 20 characters)" });
     return;
   }
 

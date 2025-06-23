@@ -41,8 +41,8 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
 
   const validateForm = () => {
     // Username
-    if (username.length < 3) {
-      alert("Username must be at least 3 characters long.");
+    if (username.length < 3 || username.length > 15) {
+      alert("Username must be between 3 and 15 characters");
       return false;
     }
 
@@ -145,6 +145,7 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
           type="text"
           placeholder="First name"
           value={firstName}
+          maxLength={15}
           onChange={(e) => setFirstName(e.target.value)}
           className="w-1/2 mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
@@ -152,6 +153,7 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
           type="text"
           placeholder="Last name"
           value={lastName}
+          maxLength={15}
           onChange={(e) => setLastName(e.target.value)}
           className="w-1/2 mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
@@ -170,6 +172,7 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
         type="email"
         placeholder="Email"
         value={email}
+        maxLength={64}
         onChange={(e) => setEmail(e.target.value)}
         className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
       />
@@ -178,13 +181,14 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
         type="text"
         placeholder="Username"
         value={username}
+        maxLength={15}
         onChange={(e) => setUsername(e.target.value)}
         onFocus={() => setFocusedField("username")}
         className="w-full mb-3 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
       />
       {focusedField === "username" && (
         <p className="text-xs text-neutral-400 mb-3">
-          Username must be at least 3 characters long.
+          Username must be between 3 and 15 characters.
         </p>
       )}
       {/* Password */}
@@ -193,6 +197,7 @@ export default function RegisterForm({ onSwitch, onClose }: Props) {
           type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
+          maxLength={20}
           onChange={(e) => setPassword(e.target.value)}
           onFocus={() => setFocusedField("password")}
           className="w-full mb-4 px-4 py-2 rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
