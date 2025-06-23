@@ -83,4 +83,58 @@ router.put("/newsletter", async (req: Request, res: Response) => {
   }
 });
 
+// MODIFY NAME
+router.put("/name", async (req: Request, res: Response) => {
+  const userId = (req as AuthRequest).userId;
+  const { firstName, lastName } = req.body;
+
+  // type NameUpdate = { firstName?: string; lastName?: string };
+  const updates: Partial<{ firstName: string; lastName: string }> = {};
+  if (typeof firstName === "string") {
+    const trimmed = firstName.trim();
+    if (trimmed !== "") {
+      if (trimmed.length > 15) {
+        res
+          .status(400)
+          .json({ error: "First name too long (max 15 characters)" });
+        return;
+      }
+      updates.firstName = trimmed;
+    }
+  }
+
+  if (typeof lastName === "string") {
+    const trimmed = lastName.trim();
+    if (trimmed !== "") {
+      if (trimmed.length > 15) {
+        res
+          .status(400)
+          .json({ error: "Last name too long (max 15 characters)" });
+        return;
+      }
+      updates.lastName = trimmed;
+    }
+  }
+
+  if (Object.keys(updates).length === 0) {
+    res.status(400).json({ error: "No valid fields to update." });
+    return;
+  }
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: updates,
+    });
+
+    res.status(200).json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update name", err });
+  }
+});
+
 export default router;

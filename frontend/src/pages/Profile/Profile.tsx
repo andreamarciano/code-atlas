@@ -22,11 +22,14 @@ export default function Profile() {
 
   // User Actions
   const [newEmail, setNewEmail] = useState(user?.email || "");
+  const [emailMessage, setEmailMessage] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState(
     user?.newsletter ?? false
   );
-  const [emailMessage, setEmailMessage] = useState("");
   const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [newFirstName, setNewFirstName] = useState(user?.firstName || "");
+  const [newLastName, setNewLastName] = useState(user?.lastName || "");
+  const [nameMessage, setNameMessage] = useState("");
 
   /* Fetch User Data */
   useEffect(() => {
@@ -118,6 +121,12 @@ export default function Profile() {
             setNewsletterStatus={setNewsletterStatus}
             newsletterMessage={newsletterMessage}
             setNewsletterMessage={setNewsletterMessage}
+            newFirstName={newFirstName}
+            setNewFirstName={setNewFirstName}
+            newLastName={newLastName}
+            setNewLastName={setNewLastName}
+            nameMessage={nameMessage}
+            setNameMessage={setNameMessage}
           />
         )}
 
