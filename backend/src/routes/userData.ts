@@ -50,7 +50,7 @@ router.delete("/favorites", async (req: Request, res: Response) => {
   }
 });
 
-// Removes all favorites
+// Remove all favorites
 router.delete("/favorites/all", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
 
@@ -117,12 +117,6 @@ router.get("/notes/all", async (req: Request, res: Response) => {
 // Remove all notes
 router.delete("/notes/all", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
-
-  console.log("Token userId:", userId);
-  if (!userId) {
-    res.status(400).json({ error: "Missing userId" });
-    return;
-  }
 
   try {
     await prisma.note.deleteMany({

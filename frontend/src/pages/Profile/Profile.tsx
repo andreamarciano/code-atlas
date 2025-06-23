@@ -8,7 +8,7 @@ import AccountSection from "./AccountSection";
 import FavoriteSection from "./FavoriteSection";
 import NoteSection from "./NoteSection";
 
-import type { Note } from "../../type";
+import type { Favorite, Note } from "../../type";
 type SectionType = "personal" | "account" | "favorites" | "notes";
 
 export default function Profile() {
@@ -17,9 +17,7 @@ export default function Profile() {
   const [section, setSection] = useState<SectionType>("personal");
 
   // User Data
-  const [favorites, setFavorites] = useState<{ id: number; name: string }[]>(
-    []
-  );
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
 
   // User Actions
@@ -80,6 +78,24 @@ export default function Profile() {
     }
   };
 
+  const removeAllFavorites = async () => {
+    const confirm = window.confirm("Are you sure you to remove all favorites?");
+    if (!confirm) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await fetch("http://localhost:4000/api/user/favorites/all", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setFavorites([]);
+    } catch (err) {
+      console.error("Error removing all favorites: ", err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex">
       {/* Navbar */}
@@ -107,7 +123,12 @@ export default function Profile() {
         {section === "account" && <AccountSection />}
 
         {/* Favorite */}
-        {section === "favorites" && <FavoriteSection favorites={favorites} />}
+        {section === "favorites" && (
+          <FavoriteSection
+            favorites={favorites}
+            onRemoveAll={removeAllFavorites}
+          />
+        )}
 
         {/* Notes */}
         {section === "notes" && (

@@ -1,11 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { Star, Trash2 } from "lucide-react";
 
+import type { Favorite } from "../../type";
+
 interface FavoriteSectionProps {
-  favorites: { id: number; name: string }[];
+  favorites: Favorite[];
+  onRemoveAll: () => void;
 }
 
-export default function FavoriteSection({ favorites }: FavoriteSectionProps) {
+export default function FavoriteSection({
+  favorites,
+  onRemoveAll,
+}: FavoriteSectionProps) {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +22,10 @@ export default function FavoriteSection({ favorites }: FavoriteSectionProps) {
           My Favorite Languages
         </h2>
         {favorites.length > 0 && (
-          <button className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded text-sm">
+          <button
+            onClick={onRemoveAll}
+            className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded text-sm cursor-pointer"
+          >
             <Trash2 className="w-4 h-4" />
             Clear All
           </button>

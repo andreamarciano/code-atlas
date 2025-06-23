@@ -21,3 +21,8 @@ export type Note = {
     name: string;
   };
 };
+
+export type Favorite = {
+  id: number;
+  name: string;
+};
