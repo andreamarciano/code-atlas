@@ -22,6 +22,18 @@ router.post("/favorites", async (req: Request, res: Response) => {
   }
 });
 
+// Returns all of a user's preferred languages
+router.get("/favorites", async (req: Request, res: Response) => {
+  const userId = (req as AuthRequest).userId;
+
+  const favorites = await prisma.favoriteLanguage.findMany({
+    where: { userId },
+    include: { language: true },
+  });
+
+  res.json(favorites.map((fav) => fav.language));
+});
+
 // Removes a language from favorites
 router.delete("/favorites", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
@@ -38,22 +50,25 @@ router.delete("/favorites", async (req: Request, res: Response) => {
   }
 });
 
-// Returns all of a user's preferred languages
-router.get("/favorites", async (req, res) => {
+// Removes all favorites
+router.delete("/favorites/all", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
 
-  const favorites = await prisma.favoriteLanguage.findMany({
-    where: { userId },
-    include: { language: true },
-  });
+  try {
+    await prisma.favoriteLanguage.deleteMany({
+      where: { userId },
+    });
 
-  res.json(favorites.map((fav) => fav.language));
+    res.status(200).json({ message: "Removed all favorites" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to remove all favorites" });
+  }
 });
 
 /* NOTES */
 
 // Save or update a user note about a language
-router.post("/notes", async (req, res) => {
+router.post("/notes", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
   const { languageId, content } = req.body;
 
@@ -76,7 +91,7 @@ router.post("/notes", async (req, res) => {
 });
 
 // Retrieve an existing note
-router.get("/notes", async (req, res) => {
+router.get("/notes", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
   const languageId = parseInt(req.query.languageId as string);
 
@@ -88,7 +103,7 @@ router.get("/notes", async (req, res) => {
 });
 
 // Retrieve all user notes
-router.get("/notes/all", async (req, res) => {
+router.get("/notes/all", async (req: Request, res: Response) => {
   const userId = (req as AuthRequest).userId;
 
   const notes = await prisma.note.findMany({
@@ -97,6 +112,57 @@ router.get("/notes/all", async (req, res) => {
   });
 
   res.json(notes);
+});
+
+// Remove all notes
+router.delete("/notes/all", async (req: Request, res: Response) => {
+  const userId = (req as AuthRequest).userId;
+
+  console.log("Token userId:", userId);
+  if (!userId) {
+    res.status(400).json({ error: "Missing userId" });
+    return;
+  }
+
+  try {
+    await prisma.note.deleteMany({
+      where: { userId },
+    });
+
+    res.status(200).json({ message: "Removed all notes" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to remove all notes" });
+  }
+});
+
+// Remove one note
+router.delete("/notes/:languageId", async (req: Request, res: Response) => {
+  const userId = (req as AuthRequest).userId;
+  const languageId = parseInt(req.params.languageId);
+
+  if (!languageId) {
+    res.status(400).json({ error: "Missing languageId" });
+    return;
+  }
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: { userId, languageId },
+    });
+
+    if (!note) {
+      res.status(404).json({ error: "Note not found" });
+      return;
+    }
+
+    await prisma.note.delete({
+      where: { id: note.id },
+    });
+
+    res.status(200).json({ message: "Note removed" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to remove note" });
+  }
 });
 
 export default router;

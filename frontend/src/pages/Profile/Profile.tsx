@@ -60,6 +60,26 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  const deleteAllNotes = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete all notes?"
+    );
+    if (!confirm) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await fetch("http://localhost:4000/api/user/notes/all", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setNotes([]);
+    } catch (err) {
+      console.error("Error deleting all notes: ", err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex">
       {/* Navbar */}
@@ -90,7 +110,9 @@ export default function Profile() {
         {section === "favorites" && <FavoriteSection favorites={favorites} />}
 
         {/* Notes */}
-        {section === "notes" && <NoteSection notes={notes} />}
+        {section === "notes" && (
+          <NoteSection notes={notes} onDeleteAll={deleteAllNotes} />
+        )}
       </main>
     </div>
   );

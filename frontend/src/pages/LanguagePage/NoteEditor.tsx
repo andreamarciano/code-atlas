@@ -75,6 +75,27 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
     };
   }, [saveTimeout]);
 
+  // Delete note
+  const deleteNote = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this note?"
+    );
+    if (!confirm) return;
+
+    try {
+      await fetch(`http://localhost:4000/api/user/notes/${languageId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setNote("");
+    } catch (err) {
+      console.error("Error deleting note:", err);
+    }
+  };
+
   return (
     <div className="mt-6">
       <label htmlFor="note" className="block mb-1 font-semibold">
@@ -88,12 +109,22 @@ export default function NoteEditor({ user, languageId }: NoteEditorProps) {
         onChange={(e) => setNote(e.target.value)}
         placeholder="Write your notes here..."
       />
-      <button
-        onClick={saveNote}
-        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
-      >
-        {isSaving ? "Saving..." : "Save"}
-      </button>
+      <div className="mt-2 space-x-2">
+        <button
+          onClick={saveNote}
+          className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
+        >
+          {isSaving ? "Saving..." : "Save"}
+        </button>
+        {note.trim().length > 0 && (
+          <button
+            onClick={deleteNote}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
+          >
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 }

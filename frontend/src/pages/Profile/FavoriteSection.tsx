@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 
 interface FavoriteSectionProps {
   favorites: { id: number; name: string }[];
@@ -10,10 +10,18 @@ export default function FavoriteSection({ favorites }: FavoriteSectionProps) {
 
   return (
     <section className="bg-gray-800 rounded-2xl p-6 shadow-lg max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
-        <Star className="w-6 h-6 text-yellow-400" />
-        My Favorite Languages
-      </h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <Star className="w-6 h-6 text-yellow-400" />
+          My Favorite Languages
+        </h2>
+        {favorites.length > 0 && (
+          <button className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded text-sm">
+            <Trash2 className="w-4 h-4" />
+            Clear All
+          </button>
+        )}
+      </div>
 
       {favorites.length === 0 ? (
         <p className="text-gray-400 italic">No favorite languages found.</p>

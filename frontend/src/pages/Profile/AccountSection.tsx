@@ -34,7 +34,7 @@ export default function AccountSection() {
 
   return (
     <section className="bg-gray-800 rounded-2xl p-6 shadow-lg max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+      <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
         <Shield className="w-6 h-6 text-blue-400" />
         Account
       </h2>
