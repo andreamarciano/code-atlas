@@ -12,19 +12,22 @@ model Language {
   name     String             @unique
   favorite FavoriteLanguage[]
   Note     Note[]
+  Comment  Comment[]
 }
 
 model User {
-  id         Int                @id @default(autoincrement())
-  username   String             @unique
-  password   String
-  email      String             @unique
-  firstName  String?
-  lastName   String?
-  birthDate  DateTime
-  newsletter Boolean            @default(false)
-  favorite   FavoriteLanguage[]
-  Note       Note[]
+  id          Int                @id @default(autoincrement())
+  username    String             @unique
+  password    String
+  email       String             @unique
+  firstName   String?
+  lastName    String?
+  birthDate   DateTime
+  newsletter  Boolean            @default(false)
+  favorite    FavoriteLanguage[]
+  Note        Note[]
+  Comment     Comment[]
+  CommentLike CommentLike[]
 }
 
 // Many-to-many
@@ -46,4 +49,37 @@ model Note {
   languageId Int
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   language   Language @relation(fields: [languageId], references: [id])
+}
+
+// One-to-many
+model Comment {
+  id         Int      @id @default(autoincrement())
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     Int
+  languageId Int
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language Language      @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  likes    CommentLike[]
+
+  /**
+   * Adds a database index on 'languageId' to improve performance
+   * when querying comments by language (e.g. filtering or joining).
+   */
+  @@index([languageId])
+}
+
+// Many-to-many
+model CommentLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  commentId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
 }
