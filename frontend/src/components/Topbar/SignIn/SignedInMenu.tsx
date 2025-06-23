@@ -21,7 +21,7 @@ export default function SignedInMenu() {
     <div className="relative">
       <button
         onClick={toggleMenu}
-        className="flex items-center gap-2 text-white hover:bg-neutral-800 rounded-2xl cursor-pointer"
+        className="flex items-center gap-2 p-2 text-white hover:bg-neutral-800 rounded-2xl cursor-pointer"
       >
         <CircleUser />
         <span className="text-sm text-yellow-400">{user?.username}</span>
