@@ -101,6 +101,7 @@ export default function UserComments({ languageId }: Props) {
       setComments((prev) =>
         prev.map((c) => (c.id === updated.id ? updated : c))
       );
+      setEditingId(null);
       setEditingContent("");
     } catch (err) {
       console.error("Failed to edit comment:", err);
@@ -175,7 +176,8 @@ export default function UserComments({ languageId }: Props) {
                 </strong>
               </span>
               <span className="text-sm text-gray-400">
-                {new Date(c.createdAt).toLocaleString()}
+                {new Date(c.updatedAt).toLocaleString()}
+                {c.updatedAt !== c.createdAt && " (edited)"}
               </span>
             </div>
 
