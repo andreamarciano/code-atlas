@@ -59,7 +59,7 @@ function LanguagePage() {
       {/* Notes */}
       {user && language && <NoteEditor user={user} languageId={language.id} />}
 
-      <UserComments />
+      <UserComments languageId={language.id} />
     </div>
   );
 }
