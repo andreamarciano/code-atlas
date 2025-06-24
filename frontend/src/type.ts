@@ -26,3 +26,12 @@ export type Favorite = {
   id: number;
   name: string;
 };
+
+export type Comment = {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  username: string;
+  likesCount: number;
+};

@@ -1,9 +1,11 @@
 import { useParams, useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+import type { Language, User } from "../../type";
+
 import FavoriteButton from "./FavoriteButton";
 import NoteEditor from "./NoteEditor";
-import type { Language, User } from "../../type";
+import UserComments from "./UserComments";
 
 type ContextType = {
   favoriteLanguages: number[];
@@ -56,6 +58,8 @@ function LanguagePage() {
 
       {/* Notes */}
       {user && language && <NoteEditor user={user} languageId={language.id} />}
+
+      <UserComments />
     </div>
   );
 }

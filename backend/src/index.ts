@@ -6,6 +6,7 @@ import langRoutes from "./routes/languages";
 import authRoutes from "./routes/auth";
 import userDataRoutes from "./routes/userData";
 import profileRoutes from "./routes/profile";
+import commentRoutes from "./routes/comments";
 
 import { verifyToken } from "./middleware/verifyToken";
 
@@ -27,6 +28,7 @@ app.use("/api/languages", langRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", verifyToken, userDataRoutes);
 app.use("/api/profile", verifyToken, profileRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend running at http://localhost:${PORT}`);
